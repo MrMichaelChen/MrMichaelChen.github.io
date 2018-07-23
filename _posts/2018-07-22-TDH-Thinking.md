@@ -22,6 +22,7 @@ tags:
 3、图计算
 ## TDH Stream
 1、流处理引擎
+2、SQL
 ## 数据挖掘工具Discover
 1、集成notebook
 2、不同语言编程
