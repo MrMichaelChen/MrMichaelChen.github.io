@@ -3,12 +3,10 @@ layout:     post
 title:      博客移植实验
 subtitle:   博客移植
 date:       2018-07-23
-author:     BY
+author:     SJ
 header-img: img/post-bg-debug.png
 catalog: true
 tags:
-    - Mac
-    - 终端
     - Git
     - Github
 ---
