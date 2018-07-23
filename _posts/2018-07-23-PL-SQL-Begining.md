@@ -1,0 +1,13 @@
+---
+layout:     post
+title:      PL/SQL使用中出现的一些问题
+subtitle:   使用笔记
+date:       2018-07-23
+author:     CDX
+header-img: img/post-bg-coffee.jpeg
+catalog: true
+tags:
+    - 开发技巧
+---
+##  定义
+1、函数中定义常量是varchar不需要定义长度，变量声明是需要定义长度。
