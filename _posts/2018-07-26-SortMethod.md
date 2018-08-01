@@ -97,10 +97,55 @@ private static void quicksort(int[] arr,int start,int end){
     }
 ```
 
+```
+  1 public class quicksort{
+  2     public static void main(String[] args){
+  3         int [] arr = {2,1,4,3,5,6};
+  4         quicksortto(arr,0,4);
+  5         for(int num:arr){
+  6             System.out.println(num);
+  7         }
+  8     }
+  9 
+ 10     public static int partition(int[] arr,int left,int right){
+ 11         int i = left;
+ 12         int x = arr[left];
+ 13         for(int j=left+1;j<right;j++){
+ 14             if(arr[j]<x)
+ 15             {
+ 16                 i++;
+ 17                 swap(arr,i,j);
+ 18             }
+ 19         }
+ 20         swap(arr,left,i);
+ 21         return i;
+ 22     }
+ 23 
+ 24     public static void quicksortto(int[] arr,int left,int right){
+ 25         if(left<right){
+ 26             int q=partition(arr,left,right);
+ 27             quicksortto(arr,left,q-1);
+ 28             quicksortto(arr,q+1,right);
+ 29         }
+ 30     }
+ 31 
+ 32     public static void swap(int [] arr,int a,int b){
+ 33         int buffer = arr[a];
+ 34         arr[a] = arr[b];
+ 35         arr[b] = buffer;
+ 36     }
+ 37 }
+
+
+```
+
+
+
 ## 堆排序
 
 堆排序是借助堆来实现的选择排序，思想同简单的选择排序，以下以大顶堆为例。注意：如果想升序排序就使用大顶堆，反之使用小顶堆。原因是堆顶元素需要交换到序列尾部。
 
+???END
 首先，实现堆排序需要解决两个问题：
 
 1. 如何由一个无序序列键成一个堆？
