@@ -2,7 +2,7 @@
 layout:     post
 title:      Opennebula
 subtitle:   Opennebula部署安装与维护心得
-date:       2017-07-27
+date:       2018-07-27
 author:     CDX
 header-img: img/post-bg-debug.png
 catalog: true
