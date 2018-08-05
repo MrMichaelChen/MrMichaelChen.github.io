@@ -13,12 +13,211 @@ tags:
 
 > java中对于线程的理解和总结
 
-##JAVA实现多线程的三种方式
+## JAVA实现多线程的三种方式
 
- - treaed类
- - 实现runable接口
- - 实现callable接口（使用线程池，不要忘记shutdown！）
+### treaed类  
 
+```
+package base;
+
+class ThreadView extends Thread {
+
+    private String name;
+    ThreadView(String name){
+        this.name = name;
+    }
+
+    public void run(){
+        for (int i = 0 ; i<500 ; i++){
+            System.out.println(name + "run: " + i);
+
+            try{
+                sleep((int) Math.random() * 10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
+
+class Main {
+    public static void main(String[] args){
+        ThreadView threadView = new ThreadView("A");
+        ThreadView threadView1 = new ThreadView("B");
+        ThreadView threadView2 = new ThreadView("C");
+
+        threadView.start();
+        threadView1.start();
+        threadView2.start();
+    }
+}
+
+```
+
+### 实现runable接口
+
+```
+package base;
+
+class ThreadViewRun implements Runnable{
+    private String name;
+
+    public ThreadViewRun(String name){
+        this.name = name;
+    }
+
+    @Override
+    public void run() {
+        for (int i=0 ; i<=50; i++){
+            System.out.println(name + " `run : " +  i);
+            try{
+                Thread.sleep((int) Math.random() * 10);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void main(String[] args){
+        new Thread(new ThreadViewRun("C")).start();
+        new Thread(new ThreadViewRun("D")).start();
+    }
+}
+```  
+
+### 实现callable接口（使用线程池，不要忘记shutdown！）
+
+```
+package base;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
+
+public class ThreadViewCall implements Callable {
+
+    private String name;
+    public ThreadViewCall(String name){
+        this.name = name;
+    }
+
+    @Override
+    public Object call() throws Exception {
+        for (int i=0; i <500 ; i++){
+            System.out.println(name + " run : " + i);
+            Thread.sleep(10);
+        }
+        return "success";
+    }
+
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+
+        int taskSize = 5;
+
+        ExecutorService pool = Executors.newFixedThreadPool(taskSize);
+
+        String [] str = {"a","b","c","d","e","f"};
+
+        List<Future> list = new ArrayList<Future>();
+
+        for(String charstr:str){
+            Callable callable = new ThreadViewCall(charstr);
+
+            Future future = pool.submit(callable);
+            list.add(future);
+            // 多线程ｆｏｒ循环中不要使用输出函数
+            //System.out.println(future.get().toString());
+        }
+
+        for(Future f: list){
+            System.out.println(f.get().toString());
+        }
+
+        // 关闭线程池
+        pool.shutdown();
+    }
+
+
+}
+```
+
+## 多线程的线程安全
+ 
+１．线程安全性(原子性,可见性)
+２．线程活跃性
+３．性能
+
+## 原子性
+
+原子性是指操作是不可分的。其表现在于对于共享变量的某些操作，应该是不可分的，必须连续完成。
+例如a++，对于共享变量a的操作，实际上会执行三个步骤，
+1.读取变量a的值  
+2.a的值+1  
+3.将值赋予变量a 。
+这三个操作中任何一个操作过程中，a的值被人篡改，那么都会出现我们不希望出现的结果。所以我们必须保证这是原子性的。Java中的锁的机制解决了原子性的问题。
+
+## 可见性
+
+可见性是值一个线程对共享变量的修改，对于另一个线程来说是否是可以看到的。
+
+为什么会出现这种问题呢？
+
+我们知道，java线程通信是通过共享内存的方式进行通信的，而我们又知道，为了加快执行的速度，线程一般是不会直接操作内存的，而是操作缓存。
+
+![image][https://img-blog.csdn.net/20170902220622756?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTYwNzgyODg1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center]
+
+实际上，线程操作的是自己的工作内存，而不会直接操作主内存。如果线程对变量的操作没有刷写会主内存的话，仅仅改变了自己的工作内存的变量的副本，那么对于其他线程来说是不可见的。而如果另一个变量没有读取主内存中的新的值，而是使用旧的值的话，同样的也可以列为不可见。
+
+对于jvm来说，主内存是所有线程共享的java堆，而工作内存中的共享变量的副本是从主内存拷贝过去的，是线程私有的局部变量，位于java栈中。
+
+简单来说，只要满足了happens-before关系，那么他们就是可见的。
+
+- 1.程序次序规则：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作；
+- 2.锁定规则：一个unLock操作先行发生于后面对同一个锁额lock操作；
+- 3.volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作；
+- 4.传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C；
+- 5.线程启动规则：Thread对象的start()方法先行发生于此线程的每个一个动作；
+- 6.线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生；
+- 7.线程终结规则：线程中所有的操作都先行发生于线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行；
+- 8.对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始；
+
+## 有序性
+
+有序性是指程序在执行的时候，程序的代码执行顺序和语句的顺序是一致的。
+
+为什么会出现不一致的情况呢？
+
+这是由于重排序的缘故。
+
+在Java内存模型中，允许编译器和处理器对指令进行重排序，但是重排序过程不会影响到单线程程序的执行，却会影响到多线程并发执行的正确性。
+
+举个例子：
+
+线程A:
+```
+context = loadContext();    
+inited = true;    
+```
+线程B:
+```
+while(!inited ){
+ sleep
+}
+doSomethingwithconfig(context);
+```
+
+如果线程A发生了重排序：
+```
+inited = true;    
+context = loadContext(); 
+```
+那么线程B就会拿到一个未初始化的content去配置，从而引起错误。
+因为这个重排序对于线程A来说是不会影响线程A的正确性的，而如果loadContext()方法被阻塞了，为了增加Cpu的利用率，这个重排序是可能的。
+
+如果要防止重排序，需要使用`volatile`关键字，volatile关键字可以保证变量的操作是不会被重排序的。
 
 ## 锁的状态总共有四种
   
