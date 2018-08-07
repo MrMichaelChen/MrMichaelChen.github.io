@@ -52,7 +52,6 @@ class Main {
         threadView2.start();
     }
 }
-
 ```
 
 ### 实现runable接口
@@ -139,8 +138,6 @@ public class ThreadViewCall implements Callable {
         // 关闭线程池
         pool.shutdown();
     }
-
-
 }
 ```
 
@@ -167,7 +164,7 @@ public class ThreadViewCall implements Callable {
 
 我们知道，java线程通信是通过共享内存的方式进行通信的，而我们又知道，为了加快执行的速度，线程一般是不会直接操作内存的，而是操作缓存。
 
-![image][https://img-blog.csdn.net/20170902220622756?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTYwNzgyODg1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center]
+![image](https://img-blog.csdn.net/20170902220622756?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTYwNzgyODg1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 
 实际上，线程操作的是自己的工作内存，而不会直接操作主内存。如果线程对变量的操作没有刷写会主内存的话，仅仅改变了自己的工作内存的变量的副本，那么对于其他线程来说是不可见的。而如果另一个变量没有读取主内存中的新的值，而是使用旧的值的话，同样的也可以列为不可见。
 
