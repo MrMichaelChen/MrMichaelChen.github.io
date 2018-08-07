@@ -1,14 +1,15 @@
 --- 
 layout:     post
-title:      Java HashMap
-subtitle:   实现原理和使用方法
+title:      HashMap
+subtitle:   Java HashMap
 date:       2018-08-05
-author:     cdx
-header-img: img/post-bg-debug.png
-catalog: true
+author:     CDX
+header-img: img/post-bg-ios9-web.jpg
+catalog: true 
 tags:
-    - Java
-　　- 终端
+    - Mac
+    - 终端
+    - Git
 ---
 
 ## HashMap
