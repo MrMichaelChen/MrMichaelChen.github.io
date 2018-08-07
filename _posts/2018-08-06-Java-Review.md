@@ -2,13 +2,13 @@
 layout:     post
 title:      Java基础复习
 subtitle:   From Begining
-date:       2018-08-06
+date:       2017-08-06
 author:     cdx
 header-img: img/post-bg-debug.png
 catalog: true
 tags:
     - Java
-　　  - 终端
+　  - 终端
 ---
 
 ## strictfp 浮点运算关键字
