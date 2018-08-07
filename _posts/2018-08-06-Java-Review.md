@@ -1,15 +1,13 @@
 --- 
 layout:     post
-title:      Git指令整理
-subtitle:   不适合阅读的整理的一些个人常用的 Git 指令
-date:       2017-02-15
-author:     BY
+title:      Java基础复习
+subtitle:   Java 复习
+date:       2018-08-06
+author:     cdx
 header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
-    - Mac
-    - 终端
-    - Git
+    - Java
 ---
 
 ## strictfp 浮点运算关键字
@@ -20,5 +18,15 @@ tags:
 
 [参考链接](https://blog.csdn.net/xiaochunyong/article/details/7748713)
 
+## 泛型数组列表
+
+Java SE7中定义泛型列表:
+
+```
+ArrayList<Employee> staff = new Arraylist<>();
+```
+
 ## 
+
+
 
