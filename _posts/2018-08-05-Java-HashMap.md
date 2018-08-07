@@ -1,7 +1,7 @@
 --- 
 layout:     post
 title:      Java HashMap
-subtitle:   学习实现原理和使用方法
+subtitle:   实现原理和使用方法
 date:       2018-08-05
 author:     cdx
 header-img: img/post-bg-debug.png
@@ -74,4 +74,160 @@ public class HashMap<K,V>
 　　threshold是HashMap的阈值，用于判断是否需要调整HashMap的容量。threshold的值="容量*加载因子"，当HashMap中存储数据的数量达到threshold时，就需要将HashMap的容量加倍。
 　　loadFactor就是加载因子。 
 　　modCount是用来实现fail-fast机制的。
-##
+## HashMap的三种遍历方式
+
+1 遍历HashMap的键值对
+
+第一步：根据entrySet()获取HashMap的“键值对”的Set集合。
+第二步：通过Iterator迭代器遍历“第一步”得到的集合。
+
+// 假设map是HashMap对象
+// map中的key是String类型，value是Integer类型
+Integer integ = null;
+Iterator iter = map.entrySet().iterator();
+while(iter.hasNext()) {
+    Map.Entry entry = (Map.Entry)iter.next();
+    // 获取key
+    key = (String)entry.getKey();
+        // 获取value
+    integ = (Integer)entry.getValue();
+}
+
+2 遍历HashMap的键
+
+第一步：根据keySet()获取HashMap的“键”的Set集合。
+第二步：通过Iterator迭代器遍历“第一步”得到的集合。
+
+// 假设map是HashMap对象
+// map中的key是String类型，value是Integer类型
+String key = null;
+Integer integ = null;
+Iterator iter = map.keySet().iterator();
+while (iter.hasNext()) {
+        // 获取key
+    key = (String)iter.next();
+        // 根据key，获取value
+    integ = (Integer)map.get(key);
+}
+
+3 遍历HashMap的值
+
+第一步：根据value()获取HashMap的“值”的集合。
+第二步：通过Iterator迭代器遍历“第一步”得到的集合。
+
+// 假设map是HashMap对象
+// map中的key是String类型，value是Integer类型
+Integer value = null;
+Collection c = map.values();
+Iterator iter= c.iterator();
+while (iter.hasNext()) {
+    value = (Integer)iter.next();
+}
+
+## 遍历方式示例
+
+```
+import java.util.Map;
+import java.util.Random;
+import java.util.Iterator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Collection;
+
+/*
+ * @desc 遍历HashMap的测试程序。
+ *   (01) 通过entrySet()去遍历key、value，参考实现函数：
+ *        iteratorHashMapByEntryset()
+ *   (02) 通过keySet()去遍历key、value，参考实现函数：
+ *        iteratorHashMapByKeyset()
+ *   (03) 通过values()去遍历value，参考实现函数：
+ *        iteratorHashMapJustValues()
+ *
+ * @author skywang
+ */
+public class HashMapIteratorTest {
+
+    public static void main(String[] args) {
+        int val = 0;
+        String key = null;
+        Integer value = null;
+        Random r = new Random();
+        HashMap map = new HashMap();
+
+        for (int i=0; i<12; i++) {
+            // 随机获取一个[0,100)之间的数字
+            val = r.nextInt(100);
+            
+            key = String.valueOf(val);
+            value = r.nextInt(5);
+            // 添加到HashMap中
+            map.put(key, value);
+            System.out.println(" key:"+key+" value:"+value);
+        }
+        // 通过entrySet()遍历HashMap的key-value
+        iteratorHashMapByEntryset(map) ;
+        
+        // 通过keySet()遍历HashMap的key-value
+        iteratorHashMapByKeyset(map) ;
+        
+        // 单单遍历HashMap的value
+        iteratorHashMapJustValues(map);        
+    }
+    
+    /*
+     * 通过entry set遍历HashMap
+     * 效率高!
+     */
+    private static void iteratorHashMapByEntryset(HashMap map) {
+        if (map == null)
+            return ;
+
+        System.out.println("\niterator HashMap By entryset");
+        String key = null;
+        Integer integ = null;
+        Iterator iter = map.entrySet().iterator();
+        while(iter.hasNext()) {
+            Map.Entry entry = (Map.Entry)iter.next();
+            
+            key = (String)entry.getKey();
+            integ = (Integer)entry.getValue();
+            System.out.println(key+" -- "+integ.intValue());
+        }
+    }
+
+    /*
+     * 通过keyset来遍历HashMap
+     * 效率低!
+     */
+    private static void iteratorHashMapByKeyset(HashMap map) {
+        if (map == null)
+            return ;
+
+        System.out.println("\niterator HashMap By keyset");
+        String key = null;
+        Integer integ = null;
+        Iterator iter = map.keySet().iterator();
+        while (iter.hasNext()) {
+            key = (String)iter.next();
+            integ = (Integer)map.get(key);
+            System.out.println(key+" -- "+integ.intValue());
+        }
+    }
+    
+
+    /*
+     * 遍历HashMap的values
+     */
+    private static void iteratorHashMapJustValues(HashMap map) {
+        if (map == null)
+            return ;
+        
+        Collection c = map.values();
+        Iterator iter= c.iterator();
+        while (iter.hasNext()) {
+            System.out.println(iter.next());
+       }
+    }
+}
+```
