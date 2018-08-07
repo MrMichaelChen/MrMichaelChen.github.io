@@ -1,14 +1,15 @@
 --- 
 layout:     post
-title:      Java基础复习
-subtitle:   From Begining
-date:       2017-08-06
-author:     cdx
-header-img: img/post-bg-debug.png
+title:      Git指令整理
+subtitle:   不适合阅读的整理的一些个人常用的 Git 指令
+date:       2017-02-15
+author:     BY
+header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
-    - Java
-　  - 终端
+    - Mac
+    - 终端
+    - Git
 ---
 
 ## strictfp 浮点运算关键字
