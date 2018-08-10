@@ -1,4 +1,4 @@
---- 
+﻿--- 
 layout:     post
 title:      Java基础复习
 subtitle:   Java 复习
@@ -26,7 +26,7 @@ Java SE7中定义泛型列表:
 ArrayList<Employee> staff = new Arraylist<>();
 ```
 
-## 
+## 未完待续，找到租房后更新
 
 
 
